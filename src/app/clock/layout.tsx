@@ -17,7 +17,7 @@ export default function RootClock({ children }: { children: React.ReactNode }) {
   return (
     <div className="md:flex md:gap-7 min-h-[100vh] rounded-md text-center font-[600] w-[100vw]">
       <nav className="bg-red-700  min-h-[4rem] md:h-auto md:basis-1/5 flex justify-center gap-4 sm:gap-7 pt-4 md:flex-col md:p-6 md:justify-start text-slate-800 ">
-        <Link className="md:flex md:gap-2 " href="/clock/time">
+        <Link className="md:flex md:gap-2 " href="/clock">
           <MdOutlineTimer size="1.8rem" />
           <span className="hidden md:inline ">Time</span>
         </Link>

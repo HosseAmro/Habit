@@ -1,8 +1,14 @@
 "use client";
-import ShowTime from "@/components/ShowTime";
-import { useState, useEffect } from "react";
 import { BsPlayFill, BsStopFill, BsPauseFill } from "react-icons/bs";
 import { TiFlag } from "react-icons/ti";
+import Handlenew from "@/components/Handlenew";
+import ShowTime from "@/components/ShowTime";
+import { useState, useEffect } from "react";
+type flage1 = {
+  start: string;
+  total: string;
+  time: number;
+};
 export default function Stopwatch() {
   const [flage, setflage] = useState<flage1[]>([]);
   const [isActive, setIsActive] = useState(false);
@@ -12,12 +18,7 @@ export default function Stopwatch() {
   const min = Math.floor((time / 6000) % 60);
   const sec = Math.floor((time / 100) % 60);
   const minsec = Math.floor(time % 100);
-  type flage1 = {
-    start: string;
-    total: string;
-    time: number;
-  };
-
+  const startOld = flage[flage.length - 1]?.time || 0;
   useEffect(() => {
     let interval: NodeJS.Timer;
     if (isActive) {
@@ -36,52 +37,16 @@ export default function Stopwatch() {
   };
   const handleStartStop = () => {
     setIsActive(!isActive);
-    if (hour == 0 && min == 0 && sec == 0 && minsec == 0) {
+    if (time == 0) {
       setIsDone(false);
     }
   };
-
   const handlenew = () => {
-    const start: string =
-      `${hour >= 10 ? hour : `0${hour}`}` +
-      `:` +
-      `${min >= 10 ? min : `0${min}`}` +
-      `:` +
-      `${sec >= 10 ? sec : `0${sec}`}` +
-      `:` +
-      `${minsec >= 10 ? minsec : `0${minsec}`}`;
-
-    const total = TotalTime1(time);
-
-    setflage((old) => [
-      ...old,
-      {
-        time: time,
-        start: start,
-        total: total,
-      },
-    ]);
+    const flage1 = Handlenew({ time, hour, min, sec, minsec, startOld });
+    setflage((old) => {
+      return [...old, flage1];
+    });
   };
-  function TotalTime1(end: number): string {
-    let start = 0;
-    if (flage.length >> 0) {
-      start = flage[flage.length - 1].time;
-    }
-
-    const totaltime = end - start;
-
-    const hourtotal = Math.floor(totaltime / 360000);
-    const mintotal = Math.floor((totaltime / 6000) % 60);
-    const sectotal = Math.floor((totaltime / 100) % 60);
-    const minsectotal = Math.floor(totaltime % 100);
-
-    const start1: string =
-      `${hourtotal >= 10 ? hourtotal : `0${hourtotal}`}:` +
-      `${mintotal >= 10 ? mintotal : `0${mintotal}`}:` +
-      `${sectotal >= 10 ? sectotal : `0${sectotal}`}:` +
-      `${minsectotal >= 10 ? minsectotal : `0${minsectotal}`}`;
-    return start1;
-  }
 
   return (
     <div>
@@ -120,7 +85,14 @@ export default function Stopwatch() {
       )}
       <div className="font-bold text-[1.4rem] md:text-[1.8rem] p-5 w-[17rem] md:w-[24rem] m-auto rounded-lg">
         {flage.map((pont, index) => {
-          return <ShowTime key={index} start={pont.start} index={index} total={pont.total} />;
+          return (
+            <ShowTime
+              key={index}
+              start={pont.start}
+              index={index}
+              total={pont.total}
+            />
+          );
         })}
       </div>
     </div>
